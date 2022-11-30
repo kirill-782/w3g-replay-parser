@@ -8,7 +8,7 @@ const ReplayParser = require("./dist/lib/index").default;
 const ActionParser = require("./dist/lib/index").ActionParser;
 
 
-const filePath = "public/GHost++_2021-01-25_20-56_Undertale_(34m39s).w3g";
+const filePath = "public/111.w3g";
 
 //const filePath = "public/LastReplay.w3g";
 

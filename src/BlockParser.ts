@@ -128,12 +128,11 @@ export interface SlotInfo {
   handicap: number;
 }
 
-const decompressor = (data: Uint8Array) =>  {
+const decompressor = (data: Uint8Array) => {
   return Zlib.inflateSync(data, { finishFlush: Zlib.constants.Z_SYNC_FLUSH });
-}
+};
 
 export class BlockParser {
-
   public parseBlocks(bb: ByteBuffer, blockCount: number, isReforged: boolean) {
     let decompressedData = new ByteBuffer(8192, true);
     decompressedData.limit = 0;
@@ -156,11 +155,11 @@ export class BlockParser {
       bb.skip(isReforged ? 6 : 4);
 
       const data = bb.readBytes(compressedBlockSize).toBuffer();
-      const decompressedDataBlock = decompressor(data).slice(0, decompressedBlockSize);
-      appendAndCompact(
-        decompressedDataBlock,
-        decompressedData
+      const decompressedDataBlock = decompressor(data).slice(
+        0,
+        decompressedBlockSize
       );
+      appendAndCompact(decompressedDataBlock, decompressedData);
 
       if (i === 0) decompressedData.readUint32(); // Unknown start
 
@@ -217,7 +216,7 @@ export class BlockParser {
 
 const appendAndCompact = (data: Uint8Array, bb: ByteBuffer) => {
   bb.compact();
-  bb.ensureCapacity(bb.limit + data.length)
+  bb.ensureCapacity(bb.limit + data.length);
   bb.append(data, bb.limit);
   bb.limit += data.length;
 
@@ -296,7 +295,7 @@ const parseLeaveRecord = (bb: ByteBuffer): LeaveRecord => {
 const parseChatRecord = (bb: ByteBuffer): ChatRecord => {
   if (
     bb.offset + 3 > bb.limit ||
-    bb.offset + bb.readUint16(bb.offset + 1) > bb.limit
+    bb.offset + bb.readUint16(bb.offset + 1) + 3 > bb.limit
   )
     return undefined;
 
