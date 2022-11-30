@@ -6,6 +6,8 @@ import {
   StatStringData,
 } from "./MetadataParser.js";
 
+import fs from "fs";
+
 export type AvailableRecord =
   | GameRecord
   | PlayerRecord

@@ -625,15 +625,15 @@ const processSyncInteger = (bb: ByteBuffer): SyncIntegerData => {
   };
 };
 
-export interface Unknown75Data extends ActionData {
+export interface UnknownArrowKeyAction extends ActionData {
   type: 0x75;
-  unknownA: number;
+  arrowKey: number;
 }
 
-const processUnknown75 = (bb: ByteBuffer): Unknown75Data => {
+const processArrowKeyAction = (bb: ByteBuffer): UnknownArrowKeyAction => {
   return {
     type: 0x75,
-    unknownA: bb.readUint8(),
+    arrowKey: bb.readUint8(),
   };
 };
 
@@ -688,7 +688,7 @@ const DEFAULT_ACTION_HANDLERS: ActionHandlerList = {
   0x69: processUnknown69,
   0x6a: processUnknown6A,
   0x6b: processSyncInteger,
-  0x75: processUnknown1B,
+  0x75: processArrowKeyAction,
 };
 
 export interface ActionCommandBlock {
