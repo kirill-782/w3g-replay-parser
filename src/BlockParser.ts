@@ -130,7 +130,7 @@ export interface SlotInfo {
   handicap: number;
 }
 
-const decompressor = (data: Uint8Array) => {
+export const decompressor = (data: Uint8Array) => {
   return Zlib.inflateSync(data, { finishFlush: Zlib.constants.Z_SYNC_FLUSH });
 };
 
@@ -161,7 +161,8 @@ export class BlockParser {
         0,
         decompressedBlockSize
       );
-      appendAndCompact(decompressedDataBlock, decompressedData);
+
+      BlockParser.appendAndCompact(decompressedDataBlock, decompressedData);
 
       if (i === 0) decompressedData.readUint32(); // Unknown start
 
@@ -176,7 +177,7 @@ export class BlockParser {
         )
           break;
 
-        const nextRecord = getNextRecord(decompressedData);
+        const nextRecord = BlockParser.getNextRecord(decompressedData);
 
         if (!nextRecord) break;
 
@@ -214,57 +215,58 @@ export class BlockParser {
 
     return result;
   }
+
+  public static appendAndCompact = (data: Uint8Array, bb: ByteBuffer) => {
+    bb.compact();
+    bb.ensureCapacity(bb.limit + data.length);
+    bb.append(data, bb.limit);
+    bb.limit += data.length;
+  
+    return;
+  };
+
+  private static getNextRecord = (bb: ByteBuffer): AvailableRecord | undefined => {
+    if (bb.offset + 1 > bb.limit) return undefined;
+  
+    const recordId = bb.readUint8();
+  
+    const result = ((): AvailableRecord | undefined => {
+      switch (recordId) {
+        case 0x0:
+          return parseGameRecord(bb);
+        case 0x16:
+          return parsePlayerRecord(bb);
+        case 0x19:
+          return parseStartRecord(bb);
+        case 0x1a:
+          return { type: 0x1a, unknown: bb.readUint32() };
+        case 0x1b:
+          return { type: 0x1b, unknown: bb.readUint32() };
+        case 0x1c:
+          return { type: 0x1c, unknown: bb.readUint32() };
+        case 0x20:
+          return parseChatRecord(bb);
+        case 0x17:
+          return parseLeaveRecord(bb);
+        case 0x1f:
+          return parseTimeSlot(bb, 0x1f);
+        case 0x1e:
+          return parseTimeSlot(bb, 0x1e);
+        case 0x39:
+          return parsePlayerReforgedRecord(bb);
+        case 0x22:
+          return parseChecksumRecord(bb);
+        default:
+          throw new Error("Unknown recordId " + recordId);
+      }
+    })();
+  
+    if (result === undefined) bb.offset--;
+  
+    return result;
+  };
 }
 
-const appendAndCompact = (data: Uint8Array, bb: ByteBuffer) => {
-  bb.compact();
-  bb.ensureCapacity(bb.limit + data.length);
-  bb.append(data, bb.limit);
-  bb.limit += data.length;
-
-  return;
-};
-
-const getNextRecord = (bb: ByteBuffer): AvailableRecord | undefined => {
-  if (bb.offset + 1 > bb.limit) return undefined;
-
-  const recordId = bb.readUint8();
-
-  const result = ((): AvailableRecord | undefined => {
-    switch (recordId) {
-      case 0x0:
-        return parseGameRecord(bb);
-      case 0x16:
-        return parsePlayerRecord(bb);
-      case 0x19:
-        return parseStartRecord(bb);
-      case 0x1a:
-        return { type: 0x1a, unknown: bb.readUint32() };
-      case 0x1b:
-        return { type: 0x1b, unknown: bb.readUint32() };
-      case 0x1c:
-        return { type: 0x1c, unknown: bb.readUint32() };
-      case 0x20:
-        return parseChatRecord(bb);
-      case 0x17:
-        return parseLeaveRecord(bb);
-      case 0x1f:
-        return parseTimeSlot(bb, 0x1f);
-      case 0x1e:
-        return parseTimeSlot(bb, 0x1e);
-      case 0x39:
-        return parsePlayerReforgedRecord(bb);
-      case 0x22:
-        return parseChecksumRecord(bb);
-      default:
-        throw new Error("Unknown recordId " + recordId);
-    }
-  })();
-
-  if (result === undefined) bb.offset--;
-
-  return result;
-};
 
 const parseTimeSlot = (bb: ByteBuffer, type: 0x1f | 0x1e): TimeSlotRecord => {
   if (
@@ -412,7 +414,7 @@ const parseStartRecord = (bb: ByteBuffer): StartRecord => {
   };
 };
 
-const parseSlotInfo = (bb: ByteBuffer): SlotInfo => {
+export const parseSlotInfo = (bb: ByteBuffer): SlotInfo => {
   return {
     playerId: bb.readUint8(),
     downloadStatus: bb.readUint8(),

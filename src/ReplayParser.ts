@@ -40,12 +40,12 @@ export class ReplayParser {
     if (magicData !== REPLAY_MAGIC_HEADER)
       throw new Error("Invalid file header");
 
-    const headerData = parseHeaderData(bb);
+    const headerData = ReplayParser.parseHeaderData(bb);
 
     if (headerData.headerVersion !== 1)
       throw new Error("Unknown header version " + headerData.headerVersion);
 
-    const subHeaderData = parseSubHeaderData(bb);
+    const subHeaderData = ReplayParser.parseSubHeaderData(bb);
     bb.offset = headerData.firstBlockOffset;
 
     const blockParser = new BlockParser();
@@ -56,33 +56,33 @@ export class ReplayParser {
       records: blockParser.parseBlocks(
         bb,
         headerData.blockCount,
-        isReforged(subHeaderData.buildNumber, subHeaderData.version)
+        ReplayParser.isReforged(subHeaderData.buildNumber, subHeaderData.version)
       ),
     };
   }
+
+  public static parseHeaderData = (bb: ByteBuffer): HeaderData => {
+    return {
+      firstBlockOffset: bb.readUint32(),
+      compressedSize: bb.readUint32(),
+      headerVersion: bb.readUint32(),
+      decompressedSize: bb.readUint32(),
+      blockCount: bb.readUint32(),
+    };
+  };
+
+  public static parseSubHeaderData = (bb: ByteBuffer): SubHeaderData => {
+    return {
+      productId: bb.readUint32(),
+      version: bb.readUint32(),
+      buildNumber: bb.readUint16(),
+      flags: bb.readUint16(),
+      lengthMilis: bb.readUint32(),
+      crc32: bb.readBytes(4).toBuffer(true),
+    };
+  };
+
+  public static isReforged = (buildNumber: number, version: number) => {
+    return version > 31;
+  };
 }
-
-const parseHeaderData = (bb: ByteBuffer): HeaderData => {
-  return {
-    firstBlockOffset: bb.readUint32(),
-    compressedSize: bb.readUint32(),
-    headerVersion: bb.readUint32(),
-    decompressedSize: bb.readUint32(),
-    blockCount: bb.readUint32(),
-  };
-};
-
-const parseSubHeaderData = (bb: ByteBuffer): SubHeaderData => {
-  return {
-    productId: bb.readUint32(),
-    version: bb.readUint32(),
-    buildNumber: bb.readUint16(),
-    flags: bb.readUint16(),
-    lengthMilis: bb.readUint32(),
-    crc32: bb.readBytes(4).toBuffer(true),
-  };
-};
-
-const isReforged = (buildNumber: number, version: number) => {
-  return version > 31;
-};

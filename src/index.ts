@@ -1,6 +1,14 @@
-import { Decompressor, ReplayParser } from "./ReplayParser";
-import { ActionParser } from "./ActionParser";
+import {
+  Decompressor,
+  HeaderData,
+  ReplayParser,
+  ReplayResult,
+  SubHeaderData,
+} from "./ReplayParser";
+import { SaveGameData, SaveGameParser, SaveGameResult } from "./SaveGameParser";
 
 export default ReplayParser;
-export { ActionParser };
+export { HeaderData, SubHeaderData, ReplayResult };
+export * from "./ActionParser";
 export { Decompressor };
+export { SaveGameParser, SaveGameResult, SaveGameData };

@@ -5,24 +5,16 @@ const fs = require("fs");
 const Zlib = require("zlib");
 
 const ReplayParser = require("./dist/lib/index").default;
-const ActionParser = require("./dist/lib/index").ActionParser;
+const SaveGameParser = require("./dist/lib/index").SaveGameParser;
 
 
-const filePath = "public/111.w3g";
+const filePath = "public/lol_kek_4eburnet.w3z";
 
 //const filePath = "public/LastReplay.w3g";
 
-let asuna = new ReplayParser();
+let asuna = new SaveGameParser();
 
-const result = asuna.parseReplay(fs.readFileSync(filePath));
+const result = asuna.parseSaveGame(fs.readFileSync(filePath));
 
-const aParser = new ActionParser();
-
-result.records.actions.forEach((i) => {
-  if (i.rawData.length) {
-    const result = aParser.processActionData(i.rawData);
-    return;
-  }
-});
 
 debugger;
