@@ -166,7 +166,7 @@ export class DataBuffer {
     return resp;
   }
 
-  public writeFlot32(number: number, position?: number): DataBuffer {
+  public writeFloat32(number: number, position?: number): DataBuffer {
     const offset = position === undefined ? this.offset : position;
     this.checkBounds(offset, this.limit, 4);
 

@@ -39,76 +39,78 @@ import { Unknown62Converter } from "./Unknown62Action";
 import { Unknown69Converter } from "./Unknown69Action";
 import { Unknown6aConverter } from "./Unknown6aAction";
 import { DataBuffer } from "../DataBuffer";
+import { UjSyncConverter } from "./UjSyncAction/index";
 
-const DEFAULT_ACTION_HANDLERS: AbstractActionConverter[] = [];
-DEFAULT_ACTION_HANDLERS[PauseGameConverter.type] = new PauseGameConverter();
-DEFAULT_ACTION_HANDLERS[ResumeGameConverter.type] = new ResumeGameConverter();
-DEFAULT_ACTION_HANDLERS[IncreaseSpeedConverter.type] =
+const defaultActionHandlers: AbstractActionConverter[] = [];
+defaultActionHandlers[PauseGameConverter.type] = new PauseGameConverter();
+defaultActionHandlers[ResumeGameConverter.type] = new ResumeGameConverter();
+defaultActionHandlers[IncreaseSpeedConverter.type] =
   new IncreaseSpeedConverter();
-DEFAULT_ACTION_HANDLERS[DecreaseSpeedConverter.type] =
+defaultActionHandlers[DecreaseSpeedConverter.type] =
   new DecreaseSpeedConverter();
-DEFAULT_ACTION_HANDLERS[SaveGameConverter.type] = new SaveGameConverter();
-DEFAULT_ACTION_HANDLERS[SaveGameFinishedConverter.type] =
+defaultActionHandlers[SaveGameConverter.type] = new SaveGameConverter();
+defaultActionHandlers[SaveGameFinishedConverter.type] =
   new SaveGameFinishedConverter();
-DEFAULT_ACTION_HANDLERS[AbilityActionConverter.type] =
+defaultActionHandlers[AbilityActionConverter.type] =
   new AbilityActionConverter();
-DEFAULT_ACTION_HANDLERS[PositionAbilityActionConverter.type] =
+defaultActionHandlers[PositionAbilityActionConverter.type] =
   new PositionAbilityActionConverter();
-DEFAULT_ACTION_HANDLERS[PositionAndObjectAbilityActionConverter.type] =
+defaultActionHandlers[PositionAndObjectAbilityActionConverter.type] =
   new PositionAndObjectAbilityActionConverter();
-DEFAULT_ACTION_HANDLERS[ItemActionConverter.type] = new ItemActionConverter();
-DEFAULT_ACTION_HANDLERS[AbilityTwoTargetTwoItemActionConverter.type] =
+defaultActionHandlers[ItemActionConverter.type] = new ItemActionConverter();
+defaultActionHandlers[AbilityTwoTargetTwoItemActionConverter.type] =
   new AbilityTwoTargetTwoItemActionConverter();
-DEFAULT_ACTION_HANDLERS[ChangeSelectionConverter.type] =
+defaultActionHandlers[ChangeSelectionConverter.type] =
   new ChangeSelectionConverter();
-DEFAULT_ACTION_HANDLERS[AssignGroupHotkeyConverter.type] =
+defaultActionHandlers[AssignGroupHotkeyConverter.type] =
   new AssignGroupHotkeyConverter();
-DEFAULT_ACTION_HANDLERS[SelectGroupHotkeyConverter.type] =
+defaultActionHandlers[SelectGroupHotkeyConverter.type] =
   new SelectGroupHotkeyConverter();
-DEFAULT_ACTION_HANDLERS[SelectSubGroupConverter.type] =
+defaultActionHandlers[SelectSubGroupConverter.type] =
   new SelectSubGroupConverter();
-DEFAULT_ACTION_HANDLERS[PreSubselectionConverter.type] =
+defaultActionHandlers[PreSubselectionConverter.type] =
   new PreSubselectionConverter();
-DEFAULT_ACTION_HANDLERS[Unknown1bConverter.type] = new Unknown1bConverter();
-DEFAULT_ACTION_HANDLERS[SelectGroudItemConverter.type] =
+defaultActionHandlers[Unknown1bConverter.type] = new Unknown1bConverter();
+defaultActionHandlers[SelectGroudItemConverter.type] =
   new SelectGroudItemConverter();
-DEFAULT_ACTION_HANDLERS[CancelHeroRevivalConverter.type] =
+defaultActionHandlers[CancelHeroRevivalConverter.type] =
   new CancelHeroRevivalConverter();
-DEFAULT_ACTION_HANDLERS[RemoveQueuedUnitConverter.type] =
+defaultActionHandlers[RemoveQueuedUnitConverter.type] =
   new RemoveQueuedUnitConverter();
-DEFAULT_ACTION_HANDLERS[0x27] = new SinglePlayerCheatResourceConverter();
-DEFAULT_ACTION_HANDLERS[Unknown21Converter.type] = new Unknown21Converter();
-DEFAULT_ACTION_HANDLERS[0x28] = new SinglePlayerCheatResourceConverter();
-DEFAULT_ACTION_HANDLERS[0x2d] = new SinglePlayerCheatResourceConverter();
-DEFAULT_ACTION_HANDLERS[0x2e] = new SinglePlayerCheatTimeConverter();
-DEFAULT_ACTION_HANDLERS[0x20] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x22] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x23] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x24] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x25] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x26] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x2a] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x2b] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x2c] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x2f] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x30] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x31] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[0x32] = new SinglePlayerCheatConverter();
-DEFAULT_ACTION_HANDLERS[AllyOptionsConverter.type] = new AllyOptionsConverter();
-DEFAULT_ACTION_HANDLERS[ResourceTransferConverter.type] =
+defaultActionHandlers[0x27] = new SinglePlayerCheatResourceConverter();
+defaultActionHandlers[Unknown21Converter.type] = new Unknown21Converter();
+defaultActionHandlers[0x28] = new SinglePlayerCheatResourceConverter();
+defaultActionHandlers[0x2d] = new SinglePlayerCheatResourceConverter();
+defaultActionHandlers[0x2e] = new SinglePlayerCheatTimeConverter();
+defaultActionHandlers[0x20] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x22] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x23] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x24] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x25] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x26] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x2a] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x2b] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x2c] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x2f] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x30] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x31] = new SinglePlayerCheatConverter();
+defaultActionHandlers[0x32] = new SinglePlayerCheatConverter();
+defaultActionHandlers[AllyOptionsConverter.type] = new AllyOptionsConverter();
+defaultActionHandlers[ResourceTransferConverter.type] =
   new ResourceTransferConverter();
-DEFAULT_ACTION_HANDLERS[ChatCommandConverter.type] = new ChatCommandConverter();
-DEFAULT_ACTION_HANDLERS[ESCKeyEventConverter.type] = new ESCKeyEventConverter();
-DEFAULT_ACTION_HANDLERS[Unknown62Converter.type] = new Unknown62Converter();
-DEFAULT_ACTION_HANDLERS[OpenSkillSubmenuConverter.type] =
+defaultActionHandlers[ChatCommandConverter.type] = new ChatCommandConverter();
+defaultActionHandlers[ESCKeyEventConverter.type] = new ESCKeyEventConverter();
+defaultActionHandlers[Unknown62Converter.type] = new Unknown62Converter();
+defaultActionHandlers[OpenSkillSubmenuConverter.type] =
   new OpenSkillSubmenuConverter();
-DEFAULT_ACTION_HANDLERS[OpenBuildSubmenuConverter.type] =
+defaultActionHandlers[OpenBuildSubmenuConverter.type] =
   new OpenBuildSubmenuConverter();
-DEFAULT_ACTION_HANDLERS[MinimapPingConverter.type] = new MinimapPingConverter();
-DEFAULT_ACTION_HANDLERS[Unknown69Converter.type] = new Unknown69Converter();
-DEFAULT_ACTION_HANDLERS[Unknown6aConverter.type] = new Unknown6aConverter();
-DEFAULT_ACTION_HANDLERS[SyncIntegerConverter.type] = new SyncIntegerConverter();
-DEFAULT_ACTION_HANDLERS[ArrowKeyConverter.type] = new ArrowKeyConverter();
+defaultActionHandlers[MinimapPingConverter.type] = new MinimapPingConverter();
+defaultActionHandlers[Unknown69Converter.type] = new Unknown69Converter();
+defaultActionHandlers[Unknown6aConverter.type] = new Unknown6aConverter();
+defaultActionHandlers[SyncIntegerConverter.type] = new SyncIntegerConverter();
+defaultActionHandlers[ArrowKeyConverter.type] = new ArrowKeyConverter();
+defaultActionHandlers[UjSyncConverter.type] = new UjSyncConverter();
 
 export interface ActionCommandBlock {
   playerId: number;
@@ -121,8 +123,8 @@ export class ActionParser {
 
   constructor(actionHandler?: AbstractActionConverter[]) {
     this.actionHandlers = actionHandler
-      ? [...DEFAULT_ACTION_HANDLERS, ...actionHandler]
-      : DEFAULT_ACTION_HANDLERS;
+      ? [...defaultActionHandlers, ...actionHandler]
+      : defaultActionHandlers;
   }
 
   // Action payload

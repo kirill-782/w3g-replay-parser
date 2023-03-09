@@ -40,6 +40,8 @@ export * from "./ActionParser/Unknown69Action";
 export * from "./ActionParser/SinglePlayerCheatAction";
 export * from "./ActionParser/SinglePlayerCheatAction/SinglePlayerCheatResourceAction";
 export * from "./ActionParser/SinglePlayerCheatAction/SinglePlayerCheatTimeAction";
+export * from "./ActionParser/UjSyncAction";
+export * from "./ActionParser/UjSyncAction/SyncHashtableVariable";
 
 // PackedParser
 

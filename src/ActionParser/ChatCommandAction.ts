@@ -15,7 +15,7 @@ export class ChatCommandConverter extends AbstractActionConverter {
   public static readonly type = 0x60;
 
   public assembly(data: ChatCommandAction): Uint8Array {
-    const byteBuffer = new DataBuffer(13 + stringBytes(data.command) + 1, true);
+    const byteBuffer = new DataBuffer(9 + stringBytes(data.command) + 1, true);
 
     byteBuffer.writeUint8(ChatCommandConverter.type);
     byteBuffer.writeUint32(data.unknownA);

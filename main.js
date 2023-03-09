@@ -20,7 +20,7 @@ if (true) {
   const SaveGameParser =
     require("./dist/lib/SaveGameParser/index").SaveGameParser;
 
-  const filePath = "public/111.w3g";
+  const filePath = "public/KokomiNaDne.w3g";
 
   //const filePath = "public/LastReplay.w3g";
 
@@ -39,14 +39,20 @@ if (true) {
   const ap = new ActionParser2();
 
   result.records.actions.forEach((i) => {
-    if (i.record.rawData.byteLength)
-      ap.assembly(ap.parse(DataBuffer.wrap(i.record.rawData, true)));
+    if (i.record.rawData.byteLength) {
+      const result1 = ap.parse(DataBuffer.wrap(i.record.rawData, true));
+
+      const result2 = ap.assembly(result1);
+
+      const result3 = ap.parse(DataBuffer.wrap(result2, true));
+
+      const x = 0;
+    }
   });
 
-  const x = 0;
+
 }
 const amqplib = require("amqplib");
 const ActionParser = require("./dist/lib/ActionParser").ActionParser;
 
 const parser = new ActionParser([]);
-
