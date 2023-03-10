@@ -115,8 +115,8 @@ export class SyncHashtableVariableConverter extends AbstractActionConverter {
     const variableType = byteBuffer.readUint8();
     const payloadLength = byteBuffer.readUint16();
     const handleId = byteBuffer.readUint32();
-    const parentKey = byteBuffer.readUint32();
-    const childKey = byteBuffer.readUint32();
+    const parentKey = byteBuffer.readInt32();
+    const childKey = byteBuffer.readInt32();
 
     let value;
     let rawValue;
@@ -151,7 +151,7 @@ export class SyncHashtableVariableConverter extends AbstractActionConverter {
       case VariableType.TYPE_HANDLE:
         value = {
           variableType,
-          handleId: byteBuffer.readInt32(),
+          handleId: byteBuffer.readUint32(),
         };
 
         break;
